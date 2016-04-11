@@ -1,0 +1,201 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.appworks.example.service</groupId>
+    <artifactId>appworks-service-example</artifactId>
+    <packaging>war</packaging>
+    <version>16</version>
+
+    <name>AppWorks Service Example</name>
+
+    <description>An AppWorks service that provides examples of using the different parts
+        of the AppWorks Service Development Kit (SDK). Most the SDK REST clients are used
+        and there are a number of the message handler implementations. A minimal RESTful
+        endpoint is exposed via JAX-RS (Jersey) providing access to the services configuration
+        settings. There is also an implementation of a custom auth handler and EIM connector.
+    </description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- General app.properties -->
+        <app.properties.displayName>My AppWorks Service</app.properties.displayName>
+        <app.properties.description>My service description</app.properties.description>
+        <app.properties.releaseNumber>1</app.properties.releaseNumber>
+        <app.properties.version>1.0.0</app.properties.version>
+        <app.properties.minimumClientVersion>1</app.properties.minimumClientVersion>
+
+        <!-- We set the type as 'eimconnector' as this examples does host an EIM Connector implementation,
+         we could have used 'service', as a result this service will now appear in the connectors
+         section of the Gateway console. -->
+        <app.properties.type>eimconnector</app.properties.type>
+
+        <!-- Output artifact (zip) properties. -->
+        <appworks.service.name>appworks-service-example</appworks.service.name>
+        <appworks.service.version>${app.properties.version}</appworks.service.version>
+        <appworks.service.zip.name>${appworks.service.name}_${appworks.service.version}</appworks.service.zip.name>
+
+        <!-- The version of the SDK used for the service MUST match the version of the AppWorks Gateway you
+        intend to deploy the service to. -->
+        <appworks.platform.version>16</appworks.platform.version>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <!-- Do not include these files in the war, they are top level zip entries
+                    in our "deployable" artifact, AppWorks services are packaged in a
+                    particular structure. -->
+                <excludes>
+                    <exclude>**/app.properties</exclude>
+                    <exclude>**/icon.png</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- This is a Java 8 project. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <!-- Ensure the correct contents end up in the /target folder in the correct state
+            before we package the service zip. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <directory>src/main/resources</directory>
+                            <!-- "filter" the properties we set in the pom into the app.properties file,
+                             this is the meta-data file the AppWorks Gateway uses to validate the service -->
+                            <filtering>true</filtering>
+                            <excludes>
+                                <exclude>**/META-INF/persistence.xml</exclude>
+                            </excludes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <!-- We build the AppWorks style zip using the Maven assembly plugin, please
+                read this modules assembly/assembly.xml file for details. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-distribution</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${appworks.service.zip.name}</finalName>
+                            <descriptors>
+                                <descriptor>assembly/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Create source bundle for distribution. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Create Javadoc for the projects classes on build. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- AppWorks Service Development Kit 16, we use the scope 'provided' as
+         the Gateway will supply the SDK on deployment. If a service included an SDK jar
+         whose version does not match that of the Gateway could lead to strange behaviour
+         and class issues. -->
+        <dependency>
+            <groupId>com.opentext.otag.sdk</groupId>
+            <artifactId>otag-service-development-kit</artifactId>
+            <version>${appworks.platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- SLF4J with Log4j binding-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.10</version>
+        </dependency>
+
+        <!-- Jersey JAX-RS dependencies for the services exposed REST API. -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>2.19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.19</version>
+        </dependency>
+        <!-- Use Jackson as the JSON marshalling implementation. -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+    </dependencies>
+
+</project>

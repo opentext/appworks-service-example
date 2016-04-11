@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0
+                              http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <!-- don't include the exploded module directory just its contents -->
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <!-- this is the projects contents before they get zipped into a war, jar, etc... we
+                configure our build so that the contents are in the correct form for zipping -->
+            <directory>${project.build.directory}/${project.artifactId}-${project.version}</directory>
+            <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>/log4j.properties</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+</assembly>
