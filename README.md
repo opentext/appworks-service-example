@@ -5,4 +5,4 @@ The service can be built using this Maven project and will produce a zip (appwor
 can be deployed to an AppWorks Gateway 16 instance. All you need to do is run mvn clean package to build the service.
 
 Please review the pom.xml for the build process, but more importantly the service's code itself for information on 
-how the SDK works and how to build a minimal but functional AppWorks service.
+how the AppWorks SDK works and how to build a minimal but functional AppWorks service.
