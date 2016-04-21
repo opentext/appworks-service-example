@@ -5,8 +5,6 @@ package com.appworks.service.example;
 
 public class ServiceConstants {
 
-    public static final String MY_APP_NAME = "myService";
-
     public static final String OUR_STRING_SETTING_KEY = "our.setting.key";
     public static final String OUR_NUMBER_SETTING_KEY = "our.number.setting.key";
     public static final String OUR_BOOL_SETTING_KEY = "our.boolean.setting.key";

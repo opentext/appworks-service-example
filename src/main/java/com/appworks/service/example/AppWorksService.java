@@ -67,7 +67,7 @@ public class AppWorksService extends GatewayClientRegistry.RegistryUser implemen
         try {
             // as soon as onStart is called in any implementation of AWServiceContextHandler
             // we know it is safe to instantiate our SDK clients
-            initialiseService();
+            initialiseService(appName);
             // make sure we let the Gateway know we have completed our startup
             serviceClient.completeDeployment(new DeploymentResult(true));
             ServiceLogger.info(LOG, "AppWorksService#onStart() completed");
@@ -88,12 +88,12 @@ public class AppWorksService extends GatewayClientRegistry.RegistryUser implemen
         }
     }
 
-    private void initialiseService() {
+    private void initialiseService(String appName) {
         // setup our Gateway clients, they will be accessible via the component context
         // once init completes
         GatewayClientRegistry.init();
         // ensure this AppWorks Services's settings are recorded at the Gateway
-        initialiseServiceSettings();
+        initialiseServiceSettings(appName);
         // construct our own services (AppWorksComponents) making each available to the entire
         // service, we only have a few to demonstrate some of the SDK
         initialiseServiceComponents();
@@ -152,14 +152,16 @@ public class AppWorksService extends GatewayClientRegistry.RegistryUser implemen
      * Initialise our {@code SettingsService AppWorksComponent} and ask it to create our
      * {@code Settings} for the service. These are usually service configuration and
      * can be updated at the Gateways admin console.
+     *
+     * @param appName the app name, as told to us by the SDK
      */
-    private void initialiseServiceSettings() {
+    private void initialiseServiceSettings(String appName) {
         ServiceLogger.info(LOG, "Starting SettingsService");
         SettingsService settingsService = new SettingsService(gatewayClients().getSettingsClient());
         AWComponentContext.add(settingsService);
 
         // initialise the Setting
-        settingsService.createServiceSettings();
+        settingsService.createServiceSettings(appName);
     }
 
     private void initialiseServiceComponents() {

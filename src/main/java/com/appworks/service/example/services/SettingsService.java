@@ -53,32 +53,34 @@ public class SettingsService implements AWComponent {
 
     /**
      * Create our services required settings.
+     * @param appName name of this service
      */
-    public void createServiceSettings() {
-        createConfigSetting(ServiceConstants.OUR_STRING_SETTING_KEY,
+    public void createServiceSettings(String appName) {
+        createConfigSetting(appName, ServiceConstants.OUR_STRING_SETTING_KEY,
                 ServiceConstants.SETTING_TEXT, "A String Config", SettingType.string, "DEFAULT VALUE!!!");
-        createConfigSetting(ServiceConstants.OUR_NUMBER_SETTING_KEY,
+        createConfigSetting(appName, ServiceConstants.OUR_NUMBER_SETTING_KEY,
                 "999", "A Numeric Config", SettingType.integer, "0");
-        createConfigSetting(ServiceConstants.OUR_BOOL_SETTING_KEY,
+        createConfigSetting(appName, ServiceConstants.OUR_BOOL_SETTING_KEY,
                 "true", "A Boolean Config", SettingType.bool, "false");
-        createConfigSetting(ServiceConstants.OUR_JSON_SETTING_KEY,
+        createConfigSetting(appName, ServiceConstants.OUR_JSON_SETTING_KEY,
                 ServiceConstants.SOME_JSON_CONTENT, "A JSON Config", SettingType.json, ServiceConstants.SOME_JSON_CONTENT);
     }
 
     /**
      * Create a configuration setting via the SDK.
      *
+     * @param appName      the name of this service, ensures we associate the setting with the correct service
      * @param key          setting key (id)
      * @param value        the setting value
      * @param label        the setting label
      * @param type         setting type
      * @param defaultValue default value
      */
-    private void createConfigSetting(String key, String value, String label, SettingType type, String defaultValue) {
+    private void createConfigSetting(String appName, String key, String value, String label, SettingType type, String defaultValue) {
         Optional<Setting> retrieved = getSetting(key);
         if (!retrieved.isPresent()) {
             // construct a new setting
-            Setting ourSetting = new Setting(key, ServiceConstants.MY_APP_NAME, type, label,
+            Setting ourSetting = new Setting(key, appName, type, label,
                     value, defaultValue, label, false /* readOnly  */, null /* seqNo */);
 
             ServiceLogger.info(LOG, String.format("Creating new Setting - %s", ourSetting));
