@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Open Text.  All Rights Reserved.
+ * Copyright © 2017 Open Text.  All Rights Reserved.
  */
 package com.appworks.service.example.services;
 
@@ -9,7 +9,6 @@ import com.opentext.otag.sdk.types.v3.api.error.APIException;
 import com.opentext.otag.sdk.types.v3.settings.Setting;
 import com.opentext.otag.sdk.types.v3.settings.SettingType;
 import com.opentext.otag.service.context.components.AWComponent;
-import com.appworks.service.example.util.ServiceLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +52,7 @@ public class SettingsService implements AWComponent {
 
     /**
      * Create our services required settings.
+     *
      * @param appName name of this service
      */
     public void createServiceSettings(String appName) {
@@ -83,15 +83,14 @@ public class SettingsService implements AWComponent {
             Setting ourSetting = new Setting(key, appName, type, label,
                     value, defaultValue, label, false /* readOnly  */, null /* seqNo */);
 
-            ServiceLogger.info(LOG, String.format("Creating new Setting - %s", ourSetting));
+            LOG.info(String.format("Creating new Setting - %s", ourSetting));
             try {
                 settingsClient.createSetting(ourSetting);
             } catch (APIException e) {
                 LOG.error("We failed to create setting for key {} - {}", key, e.getCallInfo());
             }
         } else {
-            ServiceLogger.info(LOG, String.format(
-                    "Setting already existed we wont add it again - %s", retrieved.get()));
+            LOG.info(String.format("Setting already existed we wont add it again - %s", retrieved.get()));
         }
     }
 

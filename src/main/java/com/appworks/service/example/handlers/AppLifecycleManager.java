@@ -1,14 +1,13 @@
 /**
- * Copyright © 2016 Open Text.  All Rights Reserved.
+ * Copyright © 2017 Open Text.  All Rights Reserved.
  */
 package com.appworks.service.example.handlers;
 
+import com.appworks.service.example.services.MailerService;
 import com.opentext.otag.sdk.handlers.AbstractLifecycleChangeHandler;
 import com.opentext.otag.sdk.types.v3.MailRequest;
 import com.opentext.otag.sdk.types.v3.message.LifecycleChangeMessage;
 import com.opentext.otag.service.context.components.AWComponentContext;
-import com.appworks.service.example.services.MailerService;
-import com.appworks.service.example.util.ServiceLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,26 +28,26 @@ public class AppLifecycleManager extends AbstractLifecycleChangeHandler {
 
     @Override
     public void onInstall(LifecycleChangeMessage otagMessage) {
-        ServiceLogger.info(LOG, "Called myService onInstall " + otagMessage.getEvent());
+        LOG.info("Called myService onInstall " + otagMessage.getEvent());
     }
 
     @Override
     public void onChangeVersion(LifecycleChangeMessage otagMessage) {
-        ServiceLogger.info(LOG, "Called myService onUpgrade " + otagMessage.getEvent());
+        LOG.info("Called myService onUpgrade " + otagMessage.getEvent());
         // do something
         sendUpgradeNoticeEmail();
     }
 
     @Override
     public void onUninstall(LifecycleChangeMessage otagMessage) {
-        ServiceLogger.info(LOG, "Called myService onUninstall " + otagMessage.getEvent());
+        LOG.info("Called myService onUninstall " + otagMessage.getEvent());
     }
 
     /**
      * Use our {@link MailerService} to send an email regarding the upgrade notice.
      */
     private void sendUpgradeNoticeEmail() {
-        MailRequest mailRequest = new MailRequest("admin@myservice.com", getToList(25),
+        MailRequest mailRequest = new MailRequest("admin@myservice.com", getToList(),
                 "MyService Upgrade Alert", "MyService has been upgraded by the otag admin");
 
         MailerService mailerService = AWComponentContext.getComponent(MailerService.class);
@@ -56,9 +55,9 @@ public class AppLifecycleManager extends AbstractLifecycleChangeHandler {
         mailerService.sendEmail(mailRequest);
     }
 
-    private List<String> getToList(int addresses) {
-        List<String> toAddresses = new ArrayList<>(addresses);
-        for (int i = 0; i < addresses; i++) {
+    private List<String> getToList() {
+        List<String> toAddresses = new ArrayList<>(25);
+        for (int i = 0; i < 25; i++) {
             toAddresses.add("testRecipient" + i + "@yourcompany.com");
         }
         return toAddresses;

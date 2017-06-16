@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Open Text.  All Rights Reserved.
+ * Copyright © 2017 Open Text.  All Rights Reserved.
  */
 package com.appworks.service.example.services;
 
@@ -7,7 +7,6 @@ import com.opentext.otag.sdk.client.v3.MailClient;
 import com.opentext.otag.sdk.types.v3.MailRequest;
 import com.opentext.otag.sdk.types.v3.MailResult;
 import com.opentext.otag.service.context.components.AWComponent;
-import com.appworks.service.example.util.ServiceLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,14 +35,14 @@ public class MailerService implements AWComponent {
             MailResult mailResult = mailClient.sendMail(mailRequest);
             if (mailResult.isSuccess()) {
                 LOG.info("Successfully send email via OTAG service endpoint");
-                ServiceLogger.info(LOG,"MailResult message=" + mailResult.getMessage());
+                LOG.info("MailResult message=" + mailResult.getMessage());
             } else {
-                ServiceLogger.info(LOG, "Failed to send email via OTAG service endpoint ");
-                ServiceLogger.info(LOG, "MailResult message=" + mailResult.getMessage());
+                LOG.info("Failed to send email via OTAG service endpoint ");
+                LOG.info("MailResult message=" + mailResult.getMessage());
             }
             return mailResult.isSuccess();
         } catch (Exception e) {
-            ServiceLogger.error(LOG, "Failed to send email via OTAG " +
+            LOG.error("Failed to send email via OTAG " +
                     "service endpoint, exception: " + e.getMessage(), e);
         }
 

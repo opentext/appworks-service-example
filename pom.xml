@@ -29,10 +29,7 @@
         <app.properties.version>1.0.0</app.properties.version>
         <app.properties.minimumClientVersion>1</app.properties.minimumClientVersion>
 
-        <!-- We set the type as 'eimconnector' as this examples does host an EIM Connector implementation,
-         we could have used 'service', as a result this service will now appear in the connectors
-         section of the Gateway console. -->
-        <app.properties.type>eimconnector</app.properties.type>
+        <app.properties.type>service</app.properties.type>
 
         <!-- Output artifact (zip) properties. -->
         <appworks.service.name>appworks-service-example</appworks.service.name>
@@ -41,7 +38,7 @@
 
         <!-- The version of the SDK used for the service MUST match the version of the AppWorks Gateway you
         intend to deploy the service to. -->
-        <appworks.platform.version>16</appworks.platform.version>
+        <appworks.platform.version>16.2</appworks.platform.version>
     </properties>
 
     <build>

@@ -1,9 +1,8 @@
 /**
- * Copyright © 2016 Open Text.  All Rights Reserved.
+ * Copyright © 2017 Open Text.  All Rights Reserved.
  */
 package com.appworks.service.example.api;
 
-import com.appworks.service.example.util.ServiceLogger;
 import com.opentext.otag.sdk.client.v3.AbstractOtagServiceClient;
 import com.opentext.otag.sdk.client.v3.AuthClient;
 import com.opentext.otag.sdk.client.v3.GatewayClientRegistry;
@@ -49,7 +48,7 @@ public abstract class AbstractResource extends GatewayClientRegistry.RegistryUse
         try {
             return getter.get();
         } catch (Exception e) {
-            ServiceLogger.error(LOG, "Cannot get the required SDK client yet?", e);
+            LOG.error("Cannot get the required SDK client yet?", e);
             throw new WebApplicationException(SERVICE_IS_YET_TO_INITIALISE_ERR,
                     Response.Status.INTERNAL_SERVER_ERROR);
         }

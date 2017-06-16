@@ -1,17 +1,16 @@
 /**
- * Copyright © 2016 Open Text.  All Rights Reserved.
+ * Copyright © 2017 Open Text.  All Rights Reserved.
  */
 package com.appworks.service.example.handlers;
 
 import com.appworks.service.example.ServiceConstants;
+import com.appworks.service.example.services.PushNotificationService;
+import com.appworks.service.example.services.SettingsService;
 import com.opentext.otag.sdk.handlers.AbstractMultiSettingChangeHandler;
 import com.opentext.otag.sdk.types.v3.api.error.APIException;
 import com.opentext.otag.sdk.types.v3.message.SettingsChangeMessage;
 import com.opentext.otag.sdk.types.v3.settings.Setting;
 import com.opentext.otag.service.context.components.AWComponentContext;
-import com.appworks.service.example.services.PushNotificationService;
-import com.appworks.service.example.services.SettingsService;
-import com.appworks.service.example.util.ServiceLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +64,7 @@ public class CustomSettingsHandler extends AbstractMultiSettingChangeHandler {
      * @param message the change message passed to us from the Gateway
      */
     private void onSettingChanged(SettingsChangeMessage message) {
-        ServiceLogger.info(LOG, "New " + message.getKey() + " value=" + message.getNewValue());
+        LOG.info("New " + message.getKey() + " value=" + message.getNewValue());
 
         try {
             // issue a test push notification to some hardcoded users
@@ -93,7 +92,7 @@ public class CustomSettingsHandler extends AbstractMultiSettingChangeHandler {
         if (settingsService != null) {
             Optional<Setting> settingOptional = settingsService.getSetting(message.getKey());
             settingOptional.ifPresent(setting ->
-                    ServiceLogger.info(LOG, "Actual value was " + setting.getValue()));
+                    LOG.info("Actual value was " + setting.getValue()));
         } else {
             LOG.warn("Unable to verify setting change, we failed to resolve the SettingService.");
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Open Text.  All Rights Reserved.
+ * Copyright © 2017 Open Text.  All Rights Reserved.
  */
 package com.appworks.service.example.services;
 
@@ -8,14 +8,10 @@ import com.opentext.otag.sdk.types.v3.TrustedProvider;
 import com.opentext.otag.sdk.types.v3.TrustedProviders;
 import com.opentext.otag.sdk.types.v3.api.error.APIException;
 import com.opentext.otag.service.context.components.AWComponent;
-import com.appworks.service.example.util.ServiceLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Optional;
-
-import static com.appworks.service.example.util.ServiceLogger.LOG_MARKER;
 
 /**
  * Some AppWorks services interact with a EIM backend that is considered trusted.
@@ -28,22 +24,13 @@ public class TrustedProviderService implements AWComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrustedProviderService.class);
 
-    public static final String TRUSTED_PROVIDER_NAME = "ImaginaryProvider";
+    private static final String TRUSTED_PROVIDER_NAME = "ImaginaryProvider";
 
     private TrustedProviderClient trustedProviderClient;
 
     public TrustedProviderService(TrustedProviderClient trustedProviderClient) {
         this.trustedProviderClient = trustedProviderClient;
         validateMyServiceTrustedProvider();
-    }
-
-    public Optional<TrustedProvider> getMyServiceTrustedProvider() {
-        try {
-            return Optional.of(trustedProviderClient.getOrCreate(TRUSTED_PROVIDER_NAME));
-        } catch (APIException e) {
-            ServiceLogger.error(LOG, "Failed to get our Trusted Provider");
-            return Optional.empty();
-        }
     }
 
     /**
@@ -56,19 +43,17 @@ public class TrustedProviderService implements AWComponent {
             if (!providerExists) {
                 TrustedProvider created = trustedProviderClient.getOrCreate(TRUSTED_PROVIDER_NAME);
                 if (created != null) {
-                    ServiceLogger.info(LOG, "The MyService related trusted provider was created");
+                    LOG.info("The MyService related trusted provider was created");
                 } else {
-                    throw new RuntimeException(LOG_MARKER +
-                            "Failed to create the MyService related trusted provider");
+                    throw new RuntimeException("Failed to create the MyService related trusted provider");
                 }
             } else {
-                ServiceLogger.info(LOG, "The MyService related trusted " +
-                        "provider already exists, no further action required");
+                LOG.info("The MyService related trusted provider already exists, no further action required");
             }
         } catch (APIException e) {
             String errMsg = String.format(
                     "Trusted provider calls via SDK client failed - %s", e.getCallInfo());
-            ServiceLogger.error(LOG, errMsg, e);
+            LOG.info(errMsg, e);
         }
 
     }
@@ -93,7 +78,7 @@ public class TrustedProviderService implements AWComponent {
         } catch (APIException e) {
             String errMsg = String.format(
                     "Failed to lookup trusted provider via SDK client - %s", e.getCallInfo());
-            ServiceLogger.error(LOG, errMsg, e);
+            LOG.info(errMsg, e);
         }
 
         return providerExists;
