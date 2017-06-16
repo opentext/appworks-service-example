@@ -44,7 +44,7 @@ You should receive the following JSON in the response body.
 ]
 ```
 
-A number of unsecured endpoints are available in `com.appworks.service.example.api.ServiceSettingsResource` Jersey resource;
+A number of unsecured endpoints are available in [ServiceSettingsResource](https://github.com/opentext/appworks-service-example/blob/master/src/main/java/com/appworks/service/example/api/ServiceSettingsResource.javaa) Jersey resource;
 - GET all settings
 - GET setting by key
 - PUT update setting 
