@@ -1,9 +1,15 @@
 # AppWorks Service Example 16.2
 
-The project contains example code for working with most, if not all, of the AppWorks Service platforms features.
+The project contains example code for working with most, if not all, of the AppWorks Service platforms features. Please
+see the OpenText developer portal for more details on AppWorks Services and the related SDK:  
+
+https://developer.opentext.com/awd/resources/articles/15239948/developer+guide+opentext+appworks+16+service+development+kit.
  
-The service can be built using this Maven project and will produce a zip (appworks-service-example_1.0.0.zip) that 
-can be deployed to an AppWorks Gateway 16.2 instance. All you need to do is run `mvn clean package` to build the service.
+## Building the service
+ 
+This is a Java 8 project and uses Apache Maven to perform the build so you will both installed. Once built using this 
+project and will produce a zip (appworks-service-example_1.0.0.zip) in the `/target` directory that can be deployed 
+to an AppWorks Gateway 16.2 instance. All you need to do is run `mvn clean package`.
 
 Please review the pom.xml for the build process, but more importantly the service's code itself for information on 
 how the AppWorks SDK works and how to build a minimal but functional AppWorks service.
